@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InmoVision 3D - Propiedades Inmobiliarias</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a3a5f;
+            --secondary-color: #f8b500;
+            --accent-color: #e74c3c;
+            --light-bg: #f8f9fa;
+            --dark-text: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+        }
+
+        .navbar {
+            background-color: var(--primary-color) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+
+        .hero-section {
+            background: linear-gradient(rgba(26, 58, 95, 0.85), rgba(26, 58, 95, 0.85)), url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3') center/cover no-repeat;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .btn-primary-custom {
+            background-color: var(--secondary-color);
+            border: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            padding: 12px 30px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-custom:hover {
+            background-color: #e0a800;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .property-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            height: 100%;
+        }
+
+        .property-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .property-img-container {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .property-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .property-card:hover .property-img {
+            transform: scale(1.05);
+        }
+
+        .property-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .property-3d-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .property-body {
+            padding: 20px;
+        }
+
+        .property-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .property-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        .property-features {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: #6c757d;
+        }
+
+        .property-feature {
+            display: flex;
+            align-items: center;
+        }
+
+        .property-feature i {
+            margin-right: 5px;
+            color: var(--secondary-color);
+        }
+
+        .property-address {
+            color: #6c757d;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        .features-section {
+            padding: 80px 0;
+            background-color: white;
+        }
+
+        .feature-box {
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 15px;
+            background-color: var(--light-bg);
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .footer-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #b8c6db;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #b8c6db;
+            font-size: 0.9rem;
+        }
+
+        .modal-3d {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-3d-content {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            background-color: #000;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .close-3d {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 2rem;
+            z-index: 1001;
+            cursor: pointer;
+            background-color: rgba(0,0,0,0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .viewer-3d {
+            width: 100%;
+            height: 100%;
+        }
+
+        .loading-3d {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+        }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .controls-3d {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1001;
+        }
+
+        .control-btn {
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .property-filter {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .filter-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 10px 15px;
+        }
+
+        .filter-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background-color: #0d2b4a;
+            transform: translateY(-2px);
+        }
+
+        .notification-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 3000;
+            display: none;
+            max-width: 350px;
+        }
+
+        .pagination {
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .page-link {
+            color: var(--primary-color);
+        }
+
+        .property-details-modal .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .property-details-carousel {
+            height: 400px;
+        }
+
+        .property-details-carousel img {
+            object-fit: cover;
+            height: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .property-features {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .property-details-carousel {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-home me-2"></i>InmoVision 3D</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#properties">Propiedades</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contacto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-user-circle me-1"></i> Mi Cuenta</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Descubre Propiedades en 3D</h1>
+            <p class="hero-subtitle">Explora inmuebles como nunca antes con nuestra tecnología de realidad virtual. Recorre cada rincón desde la comodidad de tu hogar.</p>
+            <a href="#properties" class="btn btn-primary-custom">Explorar Propiedades</a>
+        </div>
+    </section>
+
+    <!-- Properties Section -->
+    <section id="properties" class="py-5">
+        <div class="container">
+            <h2 class="section-title">Propiedades Destacadas</h2>
+            
+            <!-- Property Filter -->
+            <div class="property-filter">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="filter-group">
+                            <label class="filter-label">Tipo de Propiedad</label>
+                            <select class="form-select" id="propertyTypeFilter">
+                                <option value="all">Todos</option>
+                                <option value="house">Casa</option>
+                                <option value="apartment">Departamento</option>
+                                <option value="land">Terreno</option>
+                                <option value="office">Oficina</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="filter-group">
+                            <label class="filter-label">Ubicación</label>
+                            <select class="form-select" id="locationFilter">
+                                <option value="all">Todas</option>
+                                <option value="mexico-city">Ciudad de México</option>
+                                <option value="guadalajara">Guadalajara</option>
+                                <option value="monterrey">Monterrey</option>
+                                <option value="cancun">Cancún</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="filter-group">
+                            <label class="filter-label">Rango de Precio</label>
+                            <select class="form-select" id="priceFilter">
+                                <option value="all">Cualquier precio</option>
+                                <option value="1-2">$1M - $2M</option>
+                                <option value="2-3">$2M - $3M</option>
+                                <option value="3-5">$3M - $5M</option>
+                                <option value="5+">Más de $5M</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button class="filter-btn w-100" id="applyFilters">Filtrar Propiedades</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Property Cards -->
+            <div class="row" id="propertyContainer">
+                <!-- Las propiedades se cargarán dinámicamente con JavaScript -->
+            </div>
+            
+            <!-- Pagination -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination" id="paginationContainer">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <h2 class="section-title">Nuestros Servicios 3D</h2>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-vr-cardboard"></i>
+                        </div>
+                        <h3 class="feature-title">Tours Virtuales 3D</h3>
+                        <p>Explora cada propiedad como si estuvieras allí. Navega por cada habitación con movimiento fluido y realista.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <h3 class="feature-title">Modelos 3D Interactivos</h3>
+                        <p>Visualiza la distribución espacial de las propiedades con modelos tridimensionales detallados y precisos.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="feature-title">Experiencia Multiplataforma</h3>
+                        <p>Accede a los tours 3D desde cualquier dispositivo: computadora, tablet o teléfono móvil.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-vr-cardboard"></i>
+                        </div>
+                        <h3 class="feature-title">Realidad Virtual</h3>
+                        <p>Sumérgete completamente en las propiedades con nuestros visores de realidad virtual compatibles.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-ruler-combined"></i>
+                        </div>
+                        <h3 class="feature-title">Medición Virtual</h3>
+                        <p>Mide espacios y distancias directamente dentro del tour 3D para planificar tus muebles y decoración.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h3 class="feature-title">Personalización de Espacios</h3>
+                        <p>Experimenta con diferentes colores y acabados para visualizar cómo se vería la propiedad con tu estilo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h3 class="footer-title">InmoVision 3D</h3>
+                    <p>Revolutionizando la experiencia inmobiliaria con tecnología de vanguardia en tours virtuales 3D.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h3 class="footer-title">Enlaces Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Inicio</a></li>
+                        <li><a href="#">Propiedades</a></li>
+                        <li><a href="#">Servicios</a></li>
+                        <li><a href="#">Nosotros</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h3 class="footer-title">Tipos de Propiedades</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Casas</a></li>
+                        <li><a href="#">Departamentos</a></li>
+                        <li><a href="#">Oficinas</a></li>
+                        <li><a href="#">Terrenos</a></li>
+                        <li><a href="#">Locales Comerciales</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 mb-4">
+                    <h3 class="footer-title">Contacto</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Av. Innovación 123, Ciudad de México</li>
+                        <li><i class="fas fa-phone me-2"></i> +52 55 1234 5678</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@inmovision3d.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 InmoVision 3D. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 3D Viewer Modal -->
+    <div id="modal3d" class="modal-3d">
+        <div class="modal-3d-content">
+            <span class="close-3d">&times;</span>
+            <div class="loading-3d">
+                <div class="spinner-border text-light" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p>Cargando tour 3D...</p>
+            </div>
+            <div class="viewer-3d" id="viewer3d"></div>
+            <div class="controls-3d">
+                <button class="control-btn" id="fullscreenBtn"><i class="fas fa-expand"></i></button>
+                <button class="control-btn" id="vrBtn"><i class="fas fa-vr-cardboard"></i> VR</button>
+                <button class="control-btn" id="resetBtn"><i class="fas fa-undo"></i> Reiniciar Vista</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Property Details Modal -->
+    <div class="modal fade property-details-modal" id="propertyDetailsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="propertyModalTitle">Detalles de la Propiedad</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="propertyCarousel" class="carousel slide property-details-carousel" data-bs-ride="carousel">
+                        <div class="carousel-inner" id="carouselInner">
+                            <!-- Las imágenes se cargarán dinámicamente -->
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
+                    </div>
+                    <div class="mt-4">
+                        <h3 id="modalPropertyTitle" class="property-title"></h3>
+                        <div id="modalPropertyPrice" class="property-price mb-3"></div>
+                        <div id="modalPropertyFeatures" class="property-features mb-3"></div>
+                        <div id="modalPropertyAddress" class="property-address mb-4"></div>
+                        <p id="modalPropertyDescription" class="mb-4"></p>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary-custom view-3d-btn-modal">
+                                <i class="fas fa-cube me-2"></i> Ver Tour 3D
+                            </button>
+                            <button class="btn btn-outline-primary">
+                                <i class="fas fa-envelope me-2"></i> Contactar Agente
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notificationToast">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-check-circle me-2"></i>
+            <span id="toastMessage">Filtros aplicados correctamente</span>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.4/dist/gsap.min.js"></script>
+    <script>
+        // Datos de propiedades (simulando una base de datos)
+        const propertiesData = [
+            {
+                id: 1,
+                title: "Villa Moderna con Vista al Mar",
+                price: "$4,250,000",
+                type: "house",
+                location: "cancun",
+                priceRange: "3-5",
+                image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3",
+                images: [
+                    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3",
+                    "https://images.unsplash.com/photo-1600607687644-c7171b42498b?ixlib=rb-4.0.3",
+                    "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?ixlib=rb-4.0.3"
+                ],
+                beds: 4,
+                baths: 3,
+                area: 320,
+                address: "Cancún, Quintana Roo",
+                description: "Hermosa villa moderna con vista panorámica al mar. Cuenta con amplios espacios, diseño contemporáneo y acabados de lujo. Ideal para disfrutar de la vida playera con todas las comodidades.",
+                featured: true,
+                has3dTour: true
+            },
+            {
+                id: 2,
+                title: "Penthouse en Polanco",
+                price: "$8,750,000",
+                type: "apartment",
+                location: "mexico-city",
+                priceRange: "5+",
+                image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3",
+                images: [
+                    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3",
+                    "https://images.unsplash.com/photo-1600607687644-c7171b42498b?ixlib=rb-4.0.3",
+                    "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?ixlib=rb-4.0.3"
+                ],
+                beds: 3,
+                baths: 2.5,
+                area: 280,
+                address: "Ciudad de México",
+                description: "Espectacular penthouse en la zona más exclusiva de Polanco. Terraza con vista panorámica, acabados de primera calidad y amenities de lujo. La mejor opción para un estilo de vida sofisticado.",
+                featured: false,
+                has3dTour: true
+            },
+            {
+                id: 3,
+                title: "Casa Familiar en Residencial",
+                price: "$3,200,000",
+                type: "house",
+                location: "guadalajara",
+                priceRange: "3-5",
+                image: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-4.0.3",
+                images: [
+                    "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-4.0.3",
+                    "https://images.unsplash.com/photo-1600607687644-c7171b42498b?ixlib=rb-4.0.3",
+                    "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?ixlib=rb-4.0.3"
+                ],
+                beds: 5,
+                baths: 4,
+                area: 420,
+                address: "Guadalajara, Jalisco",
+                description: "Amplia casa familiar en residencial privado con vigilancia 24/7. Perfecta para familias grandes, con espacios amplios, jardín y área de juegos. Ubicada en una de las zonas más seguras de la ciudad.",
+                featured: true,
+                has3dTour: true
+            },
+            {
+                id: 4,
+                title: "Casa de Campo con Jardín",
+                price: "$2,850,000",
+                type: "house",
+                location: "mexico-city",
+                priceRange: "2-3",
+                image: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3",
+                images: [
+                    "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3",
+                    "https://images.unsplash.com/photo-1600607687644-c7171b42498b?ixlib=rb-4.0.3",
+                    "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?ixlib=rb-4.0.3"
+                ],
+                beds: 3,
+                baths: 2,
+                area: 350,
+                address: "Valle de Bravo, Estado de México",
+                description: "Encantadora casa de campo con amplio jardín y áreas verdes. Ideal para quienes buscan tranquilidad y contacto con la naturaleza sin renunciar a las comodidades modernas.",
+                featured: false,
+                has3dTour: true
+            },
+            {
+                id: 5,
+                title: "Loft Industrial en Centro",
+                price: "$1,950,000",
+                type: "apartment",
+                location: "monterrey",
+                priceRange: "1-2",
+                image: "https://images.unsplash.com/photo-1600573472550-721dd189cd1e?ixlib=rb-4.0.3",
+                images: [
+                    "https://images.unsplash.com/photo-1600573472550-721dd189cd1e?ixlib=rb-4.0.3",
+                    "https://images.unsplash.com/photo-1600607687644-c7171b42498b?ixlib=rb-4.0.3",
+                    "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?ixlib=rb-4.0.3"
+                ],
+                beds: 2,
+                baths: 1,
+                area: 180,
+                address: "Monterrey, Nuevo León",
+                description: "Moderno loft con estilo industrial en el corazón de la ciudad. Techos altos, ventanales amplios y detalles de diseño. Perfecto para profesionales que valoran la ubicación y el estilo.",
+                featured: true,
+                has3dTour: false
+            },
+            {
+                id: 6,
+                title: "Departamento con Vista al Parque",
+                price: "$2,350,000",
+                type: "apartment",
+                location: "mexico-city",
+                priceRange: "2-3",
+                image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3",
+                images: [
+                    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3",
+                    "https://images.unsplash.com/photo-1600607687644-c7171b42498b?ixlib=rb-4.0.3",
+                    "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?ixlib=rb-4.0.3"
+                ],
+                beds: 2,
+                baths: 2,
+                area: 150,
+                address: "Ciudad de México",
+                description: "Acogedor departamento con vista al parque más grande de la ciudad. Bien iluminado, con balcón y amenities. Excelente oportunidad de inversión en una zona en crecimiento.",
+                featured: false,
+                has3dTour: true
+            }
+        ];
+
+        // Variables globales
+        let filteredProperties = [...propertiesData];
+        let currentPage = 1;
+        const propertiesPerPage = 6;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar la visualización de propiedades
+            renderProperties();
+            
+            // Configurar event listeners para filtros
+            document.getElementById('applyFilters').addEventListener('click', applyFilters);
+            
+            // Configurar event listeners para el modal 3D
+            setup3DModal();
+            
+            // Configurar la paginación
+            setupPagination();
+        });
+
+        // Función para renderizar las propiedades
+        function renderProperties() {
+            const propertyContainer = document.getElementById('propertyContainer');
+            propertyContainer.innerHTML = '';
+            
+            // Calcular propiedades para la página actual
+            const startIndex = (currentPage - 1) * propertiesPerPage;
+            const endIndex = startIndex + propertiesPerPage;
+            const currentProperties = filteredProperties.slice(startIndex, endIndex);
+            
+            if (currentProperties.length === 0) {
+                propertyContainer.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-search fa-3x mb-3 text-muted"></i>
+                        <h3 class="text-muted">No se encontraron propiedades</h3>
+                        <p class="text-muted">Intenta ajustar los filtros para ver más resultados.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            currentProperties.forEach(property => {
+                const propertyCard = createPropertyCard(property);
+                propertyContainer.appendChild(propertyCard);
+            });
+            
+            // Actualizar la paginación
+            updatePagination();
+        }
+
+        // Función para crear una tarjeta de propiedad
+        function createPropertyCard(property) {
+            const col = document.createElement('div');
+            col.className = 'col-lg-4 col-md-6';
+            
+            col.innerHTML = `
+                <div class="property-card">
+                    <div class="property-img-container">
+                        <img src="${property.image}" class="property-img" alt="${property.title}">
+                        ${property.featured ? '<div class="property-badge">Destacado</div>' : ''}
+                        ${property.has3dTour ? '<div class="property-3d-badge"><i class="fas fa-cube me-1"></i> Tour 3D</div>' : ''}
+                    </div>
+                    <div class="property-body">
+                        <h3 class="property-title">${property.title}</h3>
+                        <div class="property-price">${property.price}</div>
+                        <div class="property-features">
+                            <div class="property-feature">
+                                <i class="fas fa-bed"></i> ${property.beds} Hab.
+                            </div>
+                            <div class="property-feature">
+                                <i class="fas fa-bath"></i> ${property.baths} Baños
+                            </div>
+                            <div class="property-feature">
+                                <i class="fas fa-ruler-combined"></i> ${property.area} m²
+                            </div>
+                        </div>
+                        <div class="property-address">
+                            <i class="fas fa-map-marker-alt me-2"></i> ${property.address}
+                        </div>
+                        <button class="btn btn-primary-custom w-100 mt-2 view-details-btn" data-property-id="${property.id}">
+                            Ver Detalles
+                        </button>
+                        ${property.has3dTour ? 
+                            `<button class="btn btn-outline-primary w-100 mt-2 view-3d-btn" data-property="${property.id}">
+                                <i class="fas fa-cube me-1"></i> Ver Tour 3D
+                            </button>` : 
+                            '<button class="btn btn-outline-secondary w-100 mt-2" disabled>Tour 3D No Disponible</button>'
+                        }
+                    </div>
+                </div>
+            `;
+            
+            // Añadir event listeners a los botones
+            col.querySelector('.view-details-btn').addEventListener('click', function() {
+                showPropertyDetails(property);
+            });
+            
+            if (property.has3dTour) {
+                col.querySelector('.view-3d-btn').addEventListener('click', function() {
+                    open3DViewer(property);
+                });
+            }
+            
+            return col;
+        }
+
+        // Función para aplicar filtros
+        function applyFilters() {
+            const typeFilter = document.getElementById('propertyTypeFilter').value;
+            const locationFilter = document.getElementById('locationFilter').value;
+            const priceFilter = document.getElementById('priceFilter').value;
+            
+            filteredProperties = propertiesData.filter(property => {
+                // Filtrar por tipo
+                if (typeFilter !== 'all' && property.type !== typeFilter) return false;
+                
+                // Filtrar por ubicación
+                if (locationFilter !== 'all' && property.location !== locationFilter) return false;
+                
+                // Filtrar por rango de precio
+                if (priceFilter !== 'all') {
+                    if (priceFilter === '1-2' && (property.priceRange !== '1-2')) return false;
+                    if (priceFilter === '2-3' && (property.priceRange !== '2-3')) return false;
+                    if (priceFilter === '3-5' && (property.priceRange !== '3-5')) return false;
+                    if (priceFilter === '5+' && (property.priceRange !== '5+')) return false;
+                }
+                
+                return true;
+            });
+            
+            // Reiniciar a la primera página
+            currentPage = 1;
+            
+            // Renderizar propiedades filtradas
+            renderProperties();
+            
+            // Mostrar notificación
+            showNotification(`Se encontraron ${filteredProperties.length} propiedades`);
+        }
+
+        // Función para mostrar detalles de la propiedad
+        function showPropertyDetails(property) {
+            // Actualizar el modal con los datos de la propiedad
+            document.getElementById('propertyModalTitle').textContent = property.title;
+            document.getElementById('modalPropertyTitle').textContent = property.title;
+            document.getElementById('modalPropertyPrice').textContent = property.price;
+            document.getElementById('modalPropertyAddress').innerHTML = `<i class="fas fa-map-marker-alt me-2"></i> ${property.address}`;
+            document.getElementById('modalPropertyDescription').textContent = property.description;
+            
+            // Actualizar características
+            const featuresHtml = `
+                <div class="property-feature">
+                    <i class="fas fa-bed"></i> ${property.beds} Hab.
+                </div>
+                <div class="property-feature">
+                    <i class="fas fa-bath"></i> ${property.baths} Baños
+                </div>
+                <div class="property-feature">
+                    <i class="fas fa-ruler-combined"></i> ${property.area} m²
+                </div>
+            `;
+            document.getElementById('modalPropertyFeatures').innerHTML = featuresHtml;
+            
+            // Actualizar carrusel de imágenes
+            const carouselInner = document.getElementById('carouselInner');
+            carouselInner.innerHTML = '';
+            
+            property.images.forEach((image, index) => {
+                const item = document.createElement('div');
+                item.className = `carousel-item ${index === 0 ? 'active' : ''}`;
+                item.innerHTML = `<img src="${image}" class="d-block w-100" alt="${property.title}">`;
+                carouselInner.appendChild(item);
+            });
+            
+            // Configurar el botón de tour 3D
+            const view3dButton = document.querySelector('.view-3d-btn-modal');
+            if (property.has3dTour) {
+                view3dButton.disabled = false;
+                view3dButton.onclick = () => {
+                    // Cerrar el modal actual
+                    bootstrap.Modal.getInstance(document.getElementById('propertyDetailsModal')).hide();
+                    // Abrir el visor 3D
+                    open3DViewer(property);
+                };
+            } else {
+                view3dButton.disabled = true;
+                view3dButton.onclick = null;
+            }
+            
+            // Mostrar el modal
+            const propertyModal = new bootstrap.Modal(document.getElementById('propertyDetailsModal'));
+            propertyModal.show();
+        }
+
+        // Configuración del modal 3D
+        function setup3DModal() {
+            const modal3d = document.getElementById('modal3d');
+            const closeBtn = document.querySelector('.close-3d');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const vrBtn = document.getElementById('vrBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            
+            // Cerrar modal
+            closeBtn.addEventListener('click', function() {
+                modal3d.style.display = 'none';
+            });
+            
+            // Cerrar al hacer clic fuera
+            window.addEventListener('click', function(event) {
+                if (event.target === modal3d) {
+                    modal3d.style.display = 'none';
+                }
+            });
+            
+            // Botón de pantalla completa
+            fullscreenBtn.addEventListener('click', function() {
+                const viewer = document.getElementById('viewer3d');
+                if (viewer.requestFullscreen) {
+                    viewer.requestFullscreen();
+                } else if (viewer.webkitRequestFullscreen) {
+                    viewer.webkitRequestFullscreen();
+                } else if (viewer.msRequestFullscreen) {
+                    viewer.msRequestFullscreen();
+                }
+            });
+            
+            // Botón de VR
+            vrBtn.addEventListener('click', function() {
+                showNotification('Para una experiencia completa en realidad virtual, utiliza un visor VR compatible con WebXR.');
+            });
+            
+            // Botón de reinicio
+            resetBtn.addEventListener('click', function() {
+                // Esta función se implementará cuando se cargue el modelo 3D real
+                showNotification('Vista reiniciada');
+            });
+        }
+
+        // Función para abrir el visor 3D
+        function open3DViewer(property) {
+            const modal3d = document.getElementById('modal3d');
+            const loading3d = document.querySelector('.loading-3d');
+            const viewer3d = document.getElementById('viewer3d');
+            
+            modal3d.style.display = 'flex';
+            loading3d.style.display = 'block';
+            viewer3d.style.display = 'none';
+            
+            // Simular carga de modelo 3D
+            setTimeout(() => {
+                loading3d.style.display = 'none';
+                viewer3d.style.display = 'block';
+                
+                // Aquí iría la carga real del modelo 3D usando Three.js
+                // Por ahora mostramos un mensaje
+                viewer3d.innerHTML = `
+                    <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: white; text-align: center;">
+                        <div>
+                            <i class="fas fa-cube fa-5x mb-4"></i>
+                            <h3>Tour 3D de ${property.title}</h3>
+                            <p>En una implementación real, aquí se cargaría el modelo 3D interactivo.</p>
+                            <button class="btn btn-primary-custom mt-3" onclick="simulate3DInteraction()">Simular Interacción</button>
+                        </div>
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        // Función para simular interacción 3D
+        function simulate3DInteraction() {
+            const viewer3d = document.getElementById('viewer3d');
+            viewer3d.innerHTML = `
+                <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: white; text-align: center;">
+                    <div>
+                        <i class="fas fa-vr-cardboard fa-5x mb-4"></i>
+                        <h3>Experiencia 3D Inmersiva</h3>
+                        <p>Usa las teclas W, A, S, D para moverte y el mouse para mirar alrededor.</p>
+                        <div class="mt-4">
+                            <button class="btn btn-primary-custom me-2" onclick="simulateRoomChange('sala')">Sala</button>
+                            <button class="btn btn-primary-custom me-2" onclick="simulateRoomChange('cocina')">Cocina</button>
+                            <button class="btn btn-primary-custom" onclick="simulateRoomChange('recamara')">Recámara</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Función para simular cambio de habitación
+        function simulateRoomChange(room) {
+            const roomNames = {
+                'sala': 'Sala de Estar',
+                'cocina': 'Cocina',
+                'recamara': 'Recámara Principal'
+            };
+            
+            const viewer3d = document.getElementById('viewer3d');
+            viewer3d.innerHTML = `
+                <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: white; text-align: center;">
+                    <div>
+                        <i class="fas fa-home fa-5x mb-4"></i>
+                        <h3>${roomNames[room]}</h3>
+                        <p>Ahora estás viendo la ${roomNames[room].toLowerCase()} en modo 3D.</p>
+                        <button class="btn btn-primary-custom mt-3" onclick="simulate3DInteraction()">Volver al Menú Principal</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Configuración de paginación
+        function setupPagination() {
+            const paginationContainer = document.getElementById('paginationContainer');
+            paginationContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('page-link')) {
+                    e.preventDefault();
+                    
+                    if (e.target.textContent === 'Siguiente') {
+                        if (currentPage < Math.ceil(filteredProperties.length / propertiesPerPage)) {
+                            currentPage++;
+                            renderProperties();
+                        }
+                    } else if (e.target.textContent === 'Anterior') {
+                        if (currentPage > 1) {
+                            currentPage--;
+                            renderProperties();
+                        }
+                    } else if (!isNaN(e.target.textContent)) {
+                        currentPage = parseInt(e.target.textContent);
+                        renderProperties();
+                    }
+                }
+            });
+        }
+
+        // Actualizar la paginación
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
+            const paginationContainer = document.getElementById('paginationContainer');
+            
+            if (totalPages <= 1) {
+                paginationContainer.style.display = 'none';
+                return;
+            }
+            
+            paginationContainer.style.display = 'flex';
+            
+            let paginationHTML = `
+                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#">Anterior</a>
+                </li>
+            `;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHTML += `
+                    <li class="page-item ${currentPage === i ? 'active' : ''}">
+                        <a class="page-link" href="#">${i}</a>
+                    </li>
+                `;
+            }
+            
+            paginationHTML += `
+                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="#">Siguiente</a>
+                </li>
+            `;
+            
+            paginationContainer.innerHTML = paginationHTML;
+        }
+
+        // Función para mostrar notificación
+        function showNotification(message) {
+            const toast = document.getElementById('notificationToast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            toast.style.display = 'block';
+            
+            // Animación de entrada
+            gsap.fromTo(toast, 
+                { y: 100, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.5 }
+            );
+            
+            // Ocultar después de 3 segundos
+            setTimeout(() => {
+                gsap.to(toast, {
+                    y: 100,
+                    opacity: 0,
+                    duration: 0.5,
+                    onComplete: () => {
+                        toast.style.display = 'none';
+                    }
+                });
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
